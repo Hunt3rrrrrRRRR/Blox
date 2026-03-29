@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blox - Home + Studio + Game</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">Blox</div>
+      <nav>
+        <button data-route="home" class="nav-btn active">Home</button>
+        <button data-route="studio" class="nav-btn">Studio</button>
+        <button data-route="play" class="nav-btn">Play</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="homeView" class="view active">
+        <h1>Build Roblox-Style Worlds</h1>
+        <p class="lead">
+          Discover AI-generated games and player-made games, then launch them instantly in the browser.
+        </p>
+
+        <div class="home-actions">
+          <button id="generateAiGame" class="primary">Generate AI Game</button>
+          <button data-route="studio" class="secondary">Open Studio</button>
+        </div>
+
+        <div class="grid-2">
+          <article class="panel">
+            <h2>AI Games</h2>
+            <p class="muted">Auto-generated templates with random themes, maps, and difficulty.</p>
+            <div id="aiGamesList" class="card-list"></div>
+          </article>
+
+          <article class="panel">
+            <h2>Player-Made Games</h2>
+            <p class="muted">Worlds created in Studio and saved in your browser.</p>
+            <div id="userGamesList" class="card-list"></div>
+          </article>
+        </div>
+        <article class="panel seo-panel">
+          <h2>Growth & Discovery</h2>
+          <p class="muted">Studio SEO preview (keywords/tags/brand) for discovery-oriented publishing.</p>
+          <pre id="seoPreview" class="code-block"></pre>
+        </article>
+      </section>
+
+      <section id="studioView" class="view">
+        <h1>Studio</h1>
+        <p class="lead">Create a new game configuration and publish it to the home page.</p>
+
+        <form id="studioForm" class="panel form-grid">
+          <label>
+            Game Name
+            <input name="name" required minlength="3" placeholder="Sky Tycoon Arena" />
+          </label>
+
+          <label>
+            Theme
+            <select name="theme">
+              <option value="city">City</option>
+              <option value="island">Island</option>
+              <option value="space">Space</option>
+              <option value="dungeon">Dungeon</option>
+            </select>
+          </label>
+
+          <label>
+            World Size
+            <select name="size">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </label>
+
+          <label>
+            Base Block
+            <select name="blockType">
+              <option value="grass">Grass</option>
+              <option value="stone">Stone</option>
+              <option value="dirt">Dirt</option>
+            </select>
+          </label>
+
+          <label>
+            AI Enemies
+            <input type="number" name="aiEnemies" min="0" max="40" value="8" />
+          </label>
+
+          <label>
+            Java Server Class (optional)
+            <input name="javaClass" placeholder="com.blox.server.GameRoom" />
+          </label>
+
+          <label>
+            Avatar Style
+            <select name="avatarStyle">
+              <option value="default">Default Personal Avatar</option>
+              <option value="blocky">Blocky Hero</option>
+              <option value="cyber">Cyber Runner</option>
+              <option value="fantasy">Fantasy Knight</option>
+            </select>
+          </label>
+
+          <label>
+            Clothing / Body Parts Theme
+            <input name="outfit" placeholder="Neon hoodie + armored boots" />
+          </label>
+
+          <label>
+            Audio Theme
+            <select name="audioTheme">
+              <option value="none">No Music</option>
+              <option value="chill">Chill Pulse</option>
+              <option value="adventure">Adventure Beat</option>
+              <option value="arcade">Arcade Loop</option>
+            </select>
+          </label>
+
+          <label>
+            Search Tags
+            <input name="tags" placeholder="hangout, roleplay, friends" />
+          </label>
+
+          <label>
+            Studio Brand
+            <input name="brand" placeholder="Blox Studio Collective" />
+          </label>
+
+          <label class="full">
+            Description
+            <textarea name="description" rows="3" placeholder="A battle sandbox with parkour towers and hidden loot."></textarea>
+          </label>
+
+          <div class="full form-actions">
+            <button type="submit" class="primary">Publish Player Game</button>
+            <button type="button" id="clearStudio" class="danger">Clear Player Games</button>
+          </div>
+        </form>
+
+        <article class="panel">
+          <h2>Studio Export (HTML + Java + JavaScript)</h2>
+          <p class="muted">
+            This snippet shows a Java backend endpoint contract and JavaScript client call you can use for multiplayer.
+          </p>
+          <pre id="exportCode" class="code-block"></pre>
+        </article>
+      </section>
+
+      <section id="playView" class="view">
+        <div class="play-header">
+          <div>
+            <h1 id="playTitle">Play</h1>
+            <p id="playMeta" class="muted">Choose a game from Home to start.</p>
+          </div>
+          <div class="play-controls">
+            <button id="backHome" class="secondary">Back to Home</button>
+          </div>
+        </div>
+
+        <div id="hud">
+          <p>WASD move · Space jump · Mouse look</p>
+          <p>Left click: remove block · Right click: place block</p>
+          <p>Press 1/2/3 to switch block type</p>
+          <p id="status">Ready</p>
+        </div>
+
+        <div id="profilePanel" class="panel">
+          <h3>Player Profile</h3>
+          <p id="avatarInfo" class="muted">Avatar: Default</p>
+          <p id="progressInfo" class="muted">Progress: none</p>
+          <div class="form-grid compact">
+            <label>
+              Audio
+              <select id="audioThemeControl">
+                <option value="none">No Music</option>
+                <option value="chill">Chill Pulse</option>
+                <option value="adventure">Adventure Beat</option>
+                <option value="arcade">Arcade Loop</option>
+              </select>
+            </label>
+            <label>
+              Volume
+              <input id="volumeControl" type="range" min="0" max="1" step="0.05" value="0.35" />
+            </label>
+          </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+        <div id="crosshair" aria-hidden="true"></div>
+        <div id="mobileControls">
+          <button data-move="forward">↑</button>
+          <button data-move="left">←</button>
+          <button data-move="right">→</button>
+          <button data-move="backward">↓</button>
+          <button id="mobileJump">Jump</button>
+          <button id="mobilePlace">Place</button>
+          <button id="mobileRemove">Remove</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
