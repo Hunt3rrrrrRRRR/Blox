@@ -115,6 +115,10 @@ function routeTo(route) {
   navButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.route === route);
   });
+
+  if (route !== "play" && activeAudio) {
+    activeAudio.pause();
+  }
 }
 
 navButtons.forEach((button) => {
@@ -353,6 +357,9 @@ function buildTerrain(gameConfig) {
 
 function bindInput() {
   window.onkeydown = (event) => {
+    if (["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.code)) {
+      event.preventDefault();
+    }
     if (event.code === "Digit1") selectedBlockType = "grass";
     if (event.code === "Digit2") selectedBlockType = "dirt";
     if (event.code === "Digit3") selectedBlockType = "stone";
@@ -363,12 +370,18 @@ function bindInput() {
   };
 
   window.onkeyup = (event) => {
-    if (!camera) return;
     if (event.code === "KeyW") mobileMoveState.forward = false;
     if (event.code === "KeyS") mobileMoveState.backward = false;
     if (event.code === "KeyA") mobileMoveState.left = false;
     if (event.code === "KeyD") mobileMoveState.right = false;
   };
+
+  window.addEventListener("blur", () => {
+    mobileMoveState.forward = false;
+    mobileMoveState.backward = false;
+    mobileMoveState.left = false;
+    mobileMoveState.right = false;
+  });
 
   window.oncontextmenu = (event) => event.preventDefault();
 
@@ -421,6 +434,7 @@ function bindInput() {
     };
     button.addEventListener("touchstart", start, { passive: true });
     button.addEventListener("touchend", stop, { passive: true });
+    button.addEventListener("touchcancel", stop, { passive: true });
     button.addEventListener("mousedown", start);
     button.addEventListener("mouseup", stop);
     button.addEventListener("mouseleave", stop);
@@ -489,8 +503,11 @@ function performActionAtCrosshair(action) {
     y: Math.round(y + normal.y),
     z: Math.round(z + normal.z),
   };
-  createBlock(target.x, target.y, target.z, selectedBlockType);
-  incrementProgress("blocksPlaced", 1);
+  const playerDistance = BABYLON.Vector3.Distance(camera.position, new BABYLON.Vector3(target.x, target.y, target.z));
+  if (playerDistance > 1.2) {
+    createBlock(target.x, target.y, target.z, selectedBlockType);
+    incrementProgress("blocksPlaced", 1);
+  }
 }
 
 function incrementProgress(metric, amount) {
@@ -643,7 +660,12 @@ function startGame(gameConfig) {
   }
 }
 
-backHomeBtn.addEventListener("click", () => routeTo("home"));
+backHomeBtn.addEventListener("click", () => {
+  if (document.exitPointerLock) {
+    document.exitPointerLock();
+  }
+  routeTo("home");
+});
 
 bindInput();
 updateExportSnippet();
