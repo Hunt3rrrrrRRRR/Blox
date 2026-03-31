@@ -115,6 +115,12 @@ h1 {
   margin-top: 1rem;
 }
 
+.how-list {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+  line-height: 1.5;
+}
+
 .card-list {
   display: flex;
   flex-direction: column;

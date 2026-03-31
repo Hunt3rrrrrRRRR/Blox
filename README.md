@@ -37,6 +37,27 @@ python3 -m http.server 8080
 
 Open <http://localhost:8080>
 
+## How to play
+
+1. Open the **Home** page.
+2. Choose any AI or player-made game and click **Play**.
+3. In Play mode, click/tap once to focus controls.
+4. Build or destroy blocks, explore the world, and your progress is saved automatically.
+
+### Desktop controls
+
+- **W / A / S / D**: Move
+- **Mouse**: Look around
+- **Space**: Jump
+- **Left Click**: Remove block
+- **Right Click**: Place block
+- **1 / 2 / 3**: Switch block type
+
+### Mobile controls
+
+- Use the on-screen movement buttons (**↑ ← → ↓**)
+- Use **Jump**, **Place**, and **Remove** buttons in the Play view
+
 ## Browser compatibility
 
 - Works on modern versions of **Chrome, Edge, Firefox, and Safari** with WebGL enabled.
@@ -45,12 +66,3 @@ Open <http://localhost:8080>
   - Pointer lock vendor-prefixed APIs.
   - Sky rendering when `BABYLON.SkyMaterial` is unavailable.
 - If WebGL is not supported by the browser/device, Play mode shows a compatibility message instead of crashing.
-
-## Controls in Play Mode
-
-- **W / A / S / D**: Move
-- **Mouse**: Look around
-- **Space**: Jump
-- **Left Click**: Remove block
-- **Right Click**: Place block
-- **1 / 2 / 3**: Switch block type
